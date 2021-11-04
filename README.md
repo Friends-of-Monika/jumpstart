@@ -4,4 +4,7 @@ development environment for [Monika After Story](https://github.com/monika-after
 
 ## Getting started
 To setup the development environment, first install Monika After Story mod to Doki Doki Literature Club, then
-run `jumpstart.sh`
+run `jumpstart.sh` with the location of Monika After Story install that you want converted into a development environment:
+```bash
+$ ./jumpstart.sh ddlc_mas
+```
