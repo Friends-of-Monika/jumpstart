@@ -1,9 +1,10 @@
 #!/bin/sh
+# shellcheck disable=SC2059
+
 if [ -t 1 ]; then
   F() { printf "\033[%sm" "$1"; }
   RE="$(F 0)"          # Reset color and styling
   BO="$(F 1)"          # Bold
-  DI="$(F 2)"          # Dimmed
   GN="$(F "38;5;40")"  # Green
   VT="$(F "38;5;129")" # Violet
   RD="$(F "38;5;196")" # Red
@@ -20,7 +21,7 @@ echo
 echo
 
 if [ "$#" -eq 0 ]; then
-  printf "  $BO${LY}Usage: $MA$0$RE $BO$GY[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n"
+  printf "  $BO${LY}Usage: $MA$0$RE $BO${GY}[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n"
   printf "  $BO${LY}Clueless? Type $MA$0$RE $BO--help$RE $BO${LY}to see supported commands and options.$RE\n\n\n"
   exit
 fi
@@ -31,13 +32,13 @@ dir="$1"
 prompt_yes_no() {
   printf "\n\033[1A"
   printf "  $BO$VT?$RE $BO$MA%s $RE$BO$GY(Y/n) $RE" "$1"
-  read ok
+  read -r ok
 
   case "$ok" in
     "")
       printf "\033[1A\r\033[K  $BO$VT?$RE $BO$MA%s $RE$BO$GY(Y/n) ${RE}Y\n" "$1"
       return 0;;
-    "Y"|"y"|"")
+    "Y"|"y")
       return 0;;
     *)
       return 1;;
