@@ -19,9 +19,10 @@ printf "                           $BO${MA}Made with $BO$RD♥$RE$BO$MA by frien
 echo
 echo
 
-if [ "$#" -lt 1 ]; then
-  printf "  $BO${LY}Usage: $MA$0$RE $BO$GY[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n\n\n"
-  exit 1
+if [ "$#" -eq 0 ]; then
+  printf "  $BO${LY}Usage: $MA$0$RE $BO$GY[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n"
+  printf "  $BO${LY}Clueless? Type $MA$0$RE $BO--help$RE $BO${LY}to see supported commands and options.$RE\n\n\n"
+  exit
 fi
 
 dir="$1"
