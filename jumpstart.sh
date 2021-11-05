@@ -22,8 +22,8 @@ fi
 
 echo
 echo
-printf "$MG%s$RE\n"                 "               Jumpstart, a Monika After Story dev install boostrap tool."
-printf "$MG%s $BO$RD♥$RE$MG %s$R\n" "                       Made with" "by friends of Monika."
+printf "$BO$MG%s$RE\n"                 "               Jumpstart, a Monika After Story dev install boostrap tool."
+printf "$BO$MG%s $BO$RD♥$RE$BO$MG %s$R\n" "                       Made with" "by friends of Monika."
 echo
 echo
 
