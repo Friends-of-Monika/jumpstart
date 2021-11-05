@@ -46,8 +46,7 @@ sub_dev() {
           printf "  $BO${LY}Supported parameters:$RE\n\n"
           printf "    $BO${LY}DDLC install  $RE${LY}location of existing DDLC install\n\n"
           printf "  $BO${LY}Supported options:$RE\n\n"
-          printf "    $BO${LY}-h, --help    $RE${LY}show this text and exit\n"
-          printf "\n\n"
+          printf "    $BO${LY}-h, --help    $RE${LY}show this text and exit\n\n\n"
           exit
           ;;
       esac
@@ -162,8 +161,7 @@ while [ "$#" -gt 0 ]; do
         printf "    $BO${LY}i, install     $RE${LY}install MAS to DDLC install\n"
         printf "    $BO${LY}d, dev         $RE${LY}patch existing Monika After Story install for development use\n\n"
         printf "  $BO${LY}Supported options:$RE\n\n"
-        printf "    $BO${LY}-h, --help     $RE${LY}show this text and exit\n"
-        printf "\n\n"
+        printf "    $BO${LY}-h, --help     $RE${LY}show this text and exit\n\n\n"
         exit
         ;;
     esac
