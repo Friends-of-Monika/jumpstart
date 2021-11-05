@@ -1,11 +1,4 @@
 #!/bin/sh
-if [ "$#" -lt 1 ]; then
-  echo "Usage: $0 <MAS install directory>"
-  exit 1
-fi
-
-dir="$1"
-
 if [ -t 1 ]; then
   F() { printf "\033[%sm" "$1"; }
   RE="$(F 0)"
@@ -14,18 +7,24 @@ if [ -t 1 ]; then
   GN="$(F "38;5;40")"
   FV="$(F "38;5;129")"
   RD="$(F "38;5;196")"
-  MG="$(F "38;5;207")"
+  MG="$(F "38;5;213")"
   GR="$(F "38;5;239")"
   LG="$(F "38;5;249")"
 fi
 
+echo
+echo
+printf "               $BO${MG}Jumpstart, a Monika After Story dev install boostrap tool.$RE\n"
+printf "                           $BO${MG}Made with $BO$RD♥$RE$BO$MG by friends of Monika.$RE\n"
+echo
+echo
 
-echo
-echo
-printf "$BO$MG%s$RE\n"                 "               Jumpstart, a Monika After Story dev install boostrap tool."
-printf "$BO$MG%s $BO$RD♥$RE$BO$MG %s$R\n" "                       Made with" "by friends of Monika."
-echo
-echo
+if [ "$#" -lt 1 ]; then
+  printf "  $BO${LG}Usage: $MG$0$RE $BO$GR[${LG}options $GR...] <${MG}command$GR> [${LG}arguments $GR...]$RE\n\n\n"
+  exit 1
+fi
+
+dir="$1"
 
 
 prompt_yes_no() {
