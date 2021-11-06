@@ -74,7 +74,7 @@ EOF
 
   if prompt_yes_no "Install expressions previewer (EXP PREVIEW topic)?"; then
     install_exp_preview() {
-      curl -sL "https://raw.githubusercontent.com/Monika-After-Story/MonikaModDev/master/Monika%20After%20Story/game/dev/dev_exp_previewer.rpy" > "$dir/game/dev_exp_previewer.rpy"
+      curl -sL --fail "https://raw.githubusercontent.com/Monika-After-Story/MonikaModDev/master/Monika%20After%20Story/game/dev/dev_exp_previewer.rpy" > "$dir/game/dev_exp_previewer.rpy"
     }
     if ! error_done_wrap "Installing expressions previewer" install_exp_preview "\n"; then patch_failed; fi
   fi

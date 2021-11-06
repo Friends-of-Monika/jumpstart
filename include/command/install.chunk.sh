@@ -47,7 +47,7 @@ sub_install() {
 
   get_rel_url() {
     rel_tmp="$(mktemp)"
-    curl -sL --show-error -o "$rel_tmp" "https://api.github.com/repos/monika-after-story/monikamoddev/releases/latest"
+    curl -sL --show-error --fail -o "$rel_tmp" "https://api.github.com/repos/monika-after-story/monikamoddev/releases/latest"
   }
   if ! error_done_wrap "Getting latest Monika After Story release" get_rel_url; then install_failed; fi
 
@@ -80,7 +80,7 @@ sub_install() {
 
   download_package() {
     pkg_tmp="$(mktemp)"
-    curl -sL --show-error -o "$pkg_tmp" "$dl_url"
+    curl -sL --show-error --fail -o "$pkg_tmp" "$dl_url"
   }
   if ! error_done_wrap "Downloading package" download_package; then install_failed; fi
 
