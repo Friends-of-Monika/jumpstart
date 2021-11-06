@@ -27,8 +27,13 @@ if [ -n "$SHELLCHECK" ]; then
 fi
 
 include styling
+
 include banner
 include no_arguments
+
+include error_done_wrap
+include prompt_yes_no
+
 include command/*.chunk.sh
 
 include args_processing
