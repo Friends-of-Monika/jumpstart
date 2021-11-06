@@ -63,7 +63,7 @@ error_done_wrap() {
     printf "\n\033[1A\r\033[K  $BO$RD✘$RE $BO$MA%s... $RE" "$desc"
     printf "$BO${RD}error!\n\n   $(cat "$tmp")$RE\n$1"
     rm "$tmp"
-    exit 1
+    return 1
   else
     printf "\n\033[1A\r\033[K  $BO$GN✔$RE $BO$MA%s... $RE" "$desc"
     printf "$BO${MA}done.$RE\n$1"
@@ -167,7 +167,7 @@ EOF
 
   if prompt_yes_no "Install expressions previewer (EXP PREVIEW topic)?"; then
     install_exp_preview() {
-      curl -sL "https://raw.githubusercontent.com/Monika-After-Story/MonikaModDev/master/Monika%20After%20Story/game/dev/dev_exp_previewer.rpy" > "$dir/game/dev_exp_previewer.rpy"
+      curl -sL --fail "https://raw.githubusercontent.com/Monika-After-Story/MonikaModDev/master/Monika%20After%20Story/game/dev/dev_exp_previewer.rpy" > "$dir/game/dev_exp_previewer.rpy"
     }
     if ! error_done_wrap "Installing expressions previewer" install_exp_preview "\n"; then patch_failed; fi
   fi
@@ -238,7 +238,7 @@ sub_install() {
 
   get_rel_url() {
     rel_tmp="$(mktemp)"
-    curl -sL --show-error -o "$rel_tmp" "https://api.github.com/repos/monika-after-story/monikamoddev/releases/latest"
+    curl -sL --show-error --fail -o "$rel_tmp" "https://api.github.com/repos/monika-after-story/monikamoddev/releases/latest"
   }
   if ! error_done_wrap "Getting latest Monika After Story release" get_rel_url; then install_failed; fi
 
@@ -271,7 +271,7 @@ sub_install() {
 
   download_package() {
     pkg_tmp="$(mktemp)"
-    curl -sL --show-error -o "$pkg_tmp" "$dl_url"
+    curl -sL --show-error --fail -o "$pkg_tmp" "$dl_url"
   }
   if ! error_done_wrap "Downloading package" download_package; then install_failed; fi
 
