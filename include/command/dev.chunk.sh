@@ -57,7 +57,6 @@ sub_dev() {
 52a53
 >     return gamedir + "/saves"
 EOF
-
   }
   if ! error_done_wrap "Patching DDLC.py" patch_ddlc_py; then patch_failed; fi
 

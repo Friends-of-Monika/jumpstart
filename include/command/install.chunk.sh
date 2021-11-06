@@ -40,4 +40,8 @@ sub_install() {
       exit
     fi
   done
+
+  install_failed() {
+    printf "  $BO$RD✘ $RE$BO${MA}Could not add MAS to this DDLC install :($RE\n\n"
+  }
 }

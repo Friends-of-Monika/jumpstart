@@ -47,13 +47,20 @@ error_done_wrap() {
   printf "  $BO$LY🛠$RE $BO$MA%s... $RE" "$desc"
   cmd="$2"
   shift 2
-  if ! err="$("$cmd" "$@" 3>&2 2>&1 1>&3)"; then
+
+  tmp="$(mktemp)"
+  "$cmd" "$@" 2>"$tmp" >/dev/null
+  ec="$?"
+
+  if [ "$ec" -ne 0 ]; then
     printf "\r\033[K  $BO$RD✘$RE $BO$MA%s... $RE" "$desc"
-    printf "$BO${RD}error!\n\n   $err$RE\n\n"
+    printf "$BO${RD}error!\n\n   $(cat "$tmp")$RE\n\n"
+    rm "$tmp"
     exit 1
   else
     printf "\r\033[K  $BO$GN✔$RE $BO$MA%s... $RE" "$desc"
     printf "$BO${MA}done.$RE\n\n"
+    rm "$tmp"
   fi
 }
 
@@ -79,7 +86,7 @@ prompt_yes_no() {
 #include include/command/dev
 sub_dev() {
   usage() {
-    printf "  $BO${LY}Usage: $MA$0$RE ${BO}dev $BO${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n$1"
+    printf "  $BO${LY}Usage: $MA$0$RE ${BO}dev $BO${GY}[${LY}options $GY...] ${GY}<${LY}MAS install$GY>$RE\n$1"
   }
 
   hint() {
@@ -101,7 +108,7 @@ sub_dev() {
         "-h"|"--help")
           usage "\n"
           printf "  $BO${LY}Supported parameters:$RE\n\n"
-          printf "    $BO${LY}DDLC install  $RE${LY}location of existing DDLC install\n\n"
+          printf "    $BO${LY}MAS install  $RE${LY}location of existing MAS install\n\n"
           printf "  $BO${LY}Supported options:$RE\n\n"
           printf "    $BO${LY}-h, --help    $RE${LY}show this text and exit\n\n\n"
           exit
@@ -136,7 +143,6 @@ sub_dev() {
 52a53
 >     return gamedir + "/saves"
 EOF
-
   }
   if ! error_done_wrap "Patching DDLC.py" patch_ddlc_py; then patch_failed; fi
 
@@ -218,6 +224,10 @@ sub_install() {
       exit
     fi
   done
+
+  install_failed() {
+    printf "  $BO$RD✘ $RE$BO${MA}Could not add MAS to this DDLC install :($RE\n\n"
+  }
 }
 
 
