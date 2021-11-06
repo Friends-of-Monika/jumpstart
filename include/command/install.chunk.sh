@@ -44,4 +44,55 @@ sub_install() {
   install_failed() {
     printf "  $BO$RD✘ $RE$BO${MA}Could not add MAS to this DDLC install :($RE\n\n"
   }
+
+  get_rel_url() {
+    rel_tmp="$(mktemp)"
+    curl -sL --show-error -o "$rel_tmp" "https://api.github.com/repos/monika-after-story/monikamoddev/releases/latest"
+  }
+  if ! error_done_wrap "Getting latest Monika After Story release" get_rel_url; then install_failed; fi
+
+  name="$(sed -n 's/^[^"]*"name":.*"\([^"]*\)",$/\1/p' "$rel_tmp" | head -n 1)"
+  info_line "Latest release: $name" "\n"
+
+  bdu_tmp="$(mktemp -u)"
+  sed -n 's/^[^"]*"browser_download_url":.*"\([^"]*\)"$/\1/p' "$rel_tmp" >"$bdu_tmp"
+  while read -r url; do
+    case "$url" in
+      *"-Mod-Dlx"*)
+        if prompt_yes_no "Install Deluxe edition (all spritepacks included)?"; then
+          dl_url="$url"
+          break
+        fi
+        ;;
+      *"-Mod"*)
+        dl_url="$url"
+        break
+        ;;
+    esac
+  done <"$bdu_tmp"
+
+  if [ -z "$dl_url" ]; then
+    echo "Could not find mod package URL" >&2
+    return 1
+  fi
+
+  rm "$rel_tmp" "$bdu_tmp"
+
+  download_package() {
+    pkg_tmp="$(mktemp)"
+    curl -sL --show-error -o "$pkg_tmp" "$dl_url"
+  }
+  if ! error_done_wrap "Downloading package" download_package; then install_failed; fi
+
+  install_package() {
+    (
+      set -e
+      cd "$dir/game"
+      unzip -o "$pkg_tmp"
+      rm "$pkg_tmp"
+    )
+  }
+  if ! error_done_wrap "Installing package" install_package "\n"; then install_failed; fi
+
+  printf "  $BO$RD♥$RE $BO$MA%s$RE\n\n" "All done!"
 }

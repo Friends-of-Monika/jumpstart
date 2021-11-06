@@ -58,7 +58,7 @@ sub_dev() {
 >     return gamedir + "/saves"
 EOF
   }
-  if ! error_done_wrap "Patching DDLC.py" patch_ddlc_py; then patch_failed; fi
+  if ! error_done_wrap "Patching DDLC.py" patch_ddlc_py "\n"; then patch_failed; fi
 
 
   if prompt_yes_no "Enable console (Shift+O)?"; then
@@ -68,7 +68,7 @@ init python:
     config.console = True
 EOF
     }
-    if ! error_done_wrap "Enabling console" add_console; then patch_failed; fi
+    if ! error_done_wrap "Enabling console" add_console "\n"; then patch_failed; fi
   fi
 
 
@@ -76,7 +76,7 @@ EOF
     install_exp_preview() {
       curl -sL "https://raw.githubusercontent.com/Monika-After-Story/MonikaModDev/master/Monika%20After%20Story/game/dev/dev_exp_previewer.rpy" > "$dir/game/dev_exp_previewer.rpy"
     }
-    if ! error_done_wrap "Installing expressions previewer" install_exp_preview; then patch_failed; fi
+    if ! error_done_wrap "Installing expressions previewer" install_exp_preview "\n"; then patch_failed; fi
   fi
 
 
@@ -86,7 +86,7 @@ EOF
           mkdir -p "$dir/game/saves"
           cp ~/".renpy/Monika After Story/persistent" "$dir/game/saves"
         }
-        if ! error_done_wrap "Copying persistent" copy_persistent; then patch_failed; fi
+        if ! error_done_wrap "Copying persistent" copy_persistent "\n"; then patch_failed; fi
     fi
   fi
 

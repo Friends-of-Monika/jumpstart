@@ -1,5 +1,5 @@
 usage() {
-  printf "  $BO${LY}Usage: $MA$0$RE $BO${GY}[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n$1"
+  printf "  $BO${LY}Usage: $MA$0$RE $BO${GY}[${LY}options $GY...] <$RE${BO}command$GY> [${LY}arguments $GY...]$RE\n$1"
 }
 
 hint() {
@@ -37,9 +37,11 @@ while [ "$#" -gt 0 ]; do
   case "$arg" in
     "i"|"install")
       sub_install "$@"
+      exit "$?"
       ;;
     "d"|"dev")
       sub_dev "$@"
+      exit "$?"
       ;;
     *)
         printf "  $BO${LY}Unrecognized command $RE$BO$arg${LY}.$RE\n\n"

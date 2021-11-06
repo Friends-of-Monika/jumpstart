@@ -16,6 +16,7 @@ if [ -t 1 ]; then
   RE="$(F 0)"          # Reset color and styling
   BO="$(F 1)"          # Bold
   GN="$(F "38;5;40")"  # Green
+  LE="$(F "38;5;87")"  # Light blue
   VT="$(F "38;5;129")" # Violet
   RD="$(F "38;5;196")" # Red
   MA="$(F "38;5;213")" # Magenta
@@ -41,10 +42,16 @@ if [ "$#" -eq 0 ]; then
 fi
 
 
+#include include/info_line
+info_line() {
+  printf "\n\033[1A  $BO$LEℹ$RE $BO$MA%s. $RE\n$2" "$1"
+}
+
+
 #include include/error_done_wrap
 error_done_wrap() {
   desc="$1"
-  printf "  $BO$LY🛠$RE $BO$MA%s... $RE" "$desc"
+  printf "\n\033[1A  $BO$LY🛠$RE $BO$MA%s... $RE" "$desc"
   cmd="$2"
   shift 2
 
@@ -53,13 +60,13 @@ error_done_wrap() {
   ec="$?"
 
   if [ "$ec" -ne 0 ]; then
-    printf "\r\033[K  $BO$RD✘$RE $BO$MA%s... $RE" "$desc"
-    printf "$BO${RD}error!\n\n   $(cat "$tmp")$RE\n\n"
+    printf "\n\033[1A\r\033[K  $BO$RD✘$RE $BO$MA%s... $RE" "$desc"
+    printf "$BO${RD}error!\n\n   $(cat "$tmp")$RE\n$1"
     rm "$tmp"
     exit 1
   else
-    printf "\r\033[K  $BO$GN✔$RE $BO$MA%s... $RE" "$desc"
-    printf "$BO${MA}done.$RE\n\n"
+    printf "\n\033[1A\r\033[K  $BO$GN✔$RE $BO$MA%s... $RE" "$desc"
+    printf "$BO${MA}done.$RE\n$1"
     rm "$tmp"
   fi
 }
@@ -69,7 +76,7 @@ error_done_wrap() {
 prompt_yes_no() {
   printf "\n\033[1A"
   printf "  $BO$VT?$RE $BO$MA%s $RE$BO$GY(Y/n) $RE" "$1"
-  read -r ok
+  read -r ok 0<&2
 
   case "$ok" in
     "")
@@ -144,7 +151,7 @@ sub_dev() {
 >     return gamedir + "/saves"
 EOF
   }
-  if ! error_done_wrap "Patching DDLC.py" patch_ddlc_py; then patch_failed; fi
+  if ! error_done_wrap "Patching DDLC.py" patch_ddlc_py "\n"; then patch_failed; fi
 
 
   if prompt_yes_no "Enable console (Shift+O)?"; then
@@ -154,7 +161,7 @@ init python:
     config.console = True
 EOF
     }
-    if ! error_done_wrap "Enabling console" add_console; then patch_failed; fi
+    if ! error_done_wrap "Enabling console" add_console "\n"; then patch_failed; fi
   fi
 
 
@@ -162,7 +169,7 @@ EOF
     install_exp_preview() {
       curl -sL "https://raw.githubusercontent.com/Monika-After-Story/MonikaModDev/master/Monika%20After%20Story/game/dev/dev_exp_previewer.rpy" > "$dir/game/dev_exp_previewer.rpy"
     }
-    if ! error_done_wrap "Installing expressions previewer" install_exp_preview; then patch_failed; fi
+    if ! error_done_wrap "Installing expressions previewer" install_exp_preview "\n"; then patch_failed; fi
   fi
 
 
@@ -172,7 +179,7 @@ EOF
           mkdir -p "$dir/game/saves"
           cp ~/".renpy/Monika After Story/persistent" "$dir/game/saves"
         }
-        if ! error_done_wrap "Copying persistent" copy_persistent; then patch_failed; fi
+        if ! error_done_wrap "Copying persistent" copy_persistent "\n"; then patch_failed; fi
     fi
   fi
 
@@ -228,12 +235,63 @@ sub_install() {
   install_failed() {
     printf "  $BO$RD✘ $RE$BO${MA}Could not add MAS to this DDLC install :($RE\n\n"
   }
+
+  get_rel_url() {
+    rel_tmp="$(mktemp)"
+    curl -sL --show-error -o "$rel_tmp" "https://api.github.com/repos/monika-after-story/monikamoddev/releases/latest"
+  }
+  if ! error_done_wrap "Getting latest Monika After Story release" get_rel_url; then install_failed; fi
+
+  name="$(sed -n 's/^[^"]*"name":.*"\([^"]*\)",$/\1/p' "$rel_tmp" | head -n 1)"
+  info_line "Latest release: $name" "\n"
+
+  bdu_tmp="$(mktemp -u)"
+  sed -n 's/^[^"]*"browser_download_url":.*"\([^"]*\)"$/\1/p' "$rel_tmp" >"$bdu_tmp"
+  while read -r url; do
+    case "$url" in
+      *"-Mod-Dlx"*)
+        if prompt_yes_no "Install Deluxe edition (all spritepacks included)?"; then
+          dl_url="$url"
+          break
+        fi
+        ;;
+      *"-Mod"*)
+        dl_url="$url"
+        break
+        ;;
+    esac
+  done <"$bdu_tmp"
+
+  if [ -z "$dl_url" ]; then
+    echo "Could not find mod package URL" >&2
+    return 1
+  fi
+
+  rm "$rel_tmp" "$bdu_tmp"
+
+  download_package() {
+    pkg_tmp="$(mktemp)"
+    curl -sL --show-error -o "$pkg_tmp" "$dl_url"
+  }
+  if ! error_done_wrap "Downloading package" download_package; then install_failed; fi
+
+  install_package() {
+    (
+      set -e
+      cd "$dir/game"
+      unzip -o "$pkg_tmp"
+      rm "$pkg_tmp"
+    )
+  }
+  if ! error_done_wrap "Installing package" install_package "\n"; then install_failed; fi
+
+  printf "  $BO$RD♥$RE $BO$MA%s$RE\n\n" "All done!"
 }
 
 
 #include include/args_processing
 usage() {
-  printf "  $BO${LY}Usage: $MA$0$RE $BO${GY}[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n$1"
+  printf "  $BO${LY}Usage: $MA$0$RE $BO${GY}[${LY}options $GY...] <$RE${BO}command$GY> [${LY}arguments $GY...]$RE\n$1"
 }
 
 hint() {
@@ -271,9 +329,11 @@ while [ "$#" -gt 0 ]; do
   case "$arg" in
     "i"|"install")
       sub_install "$@"
+      exit "$?"
       ;;
     "d"|"dev")
       sub_dev "$@"
+      exit "$?"
       ;;
     *)
         printf "  $BO${LY}Unrecognized command $RE$BO$arg${LY}.$RE\n\n"

@@ -1,7 +1,7 @@
 prompt_yes_no() {
   printf "\n\033[1A"
   printf "  $BO$VT?$RE $BO$MA%s $RE$BO$GY(Y/n) $RE" "$1"
-  read -r ok
+  read -r ok 0<&2
 
   case "$ok" in
     "")

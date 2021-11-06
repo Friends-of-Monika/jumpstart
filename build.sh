@@ -31,6 +31,7 @@ include styling
 include banner
 include no_arguments
 
+include info_line
 include error_done_wrap
 include prompt_yes_no
 
