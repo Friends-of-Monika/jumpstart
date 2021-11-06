@@ -13,9 +13,16 @@ $ curl -o jumpstart https://raw.githubusercontent.com/Friends-of-Monika/jumpstar
 ```
 
 #### mon.icu short link
+No requests made to `dl.mon.icu` domain are logged by the repository and/or
+organization maintainers.
+However, it is possible for CloudFlare to collect user data, which is still not
+available to the abovementioned people and is not collected by them.
+
 ```shell
 $ curl -L -o jumpstart https://dl.mon.icu/jumpstart
 ```
+
+---
 
 Optionally, you can add it to `/usr/bin` (or any other location that is on $PATH.)
 
