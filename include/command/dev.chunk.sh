@@ -1,7 +1,15 @@
 sub_dev() {
-  if [ "$#" -eq 0 ]; then
-    printf "  $BO${LY}Usage: $MA$0$RE ${BO}dev $BO${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n"
+  usage() {
+    printf "  $BO${LY}Usage: $MA$0$RE ${BO}dev $BO${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n$1"
+  }
+
+  hint() {
     printf "  $BO${LY}Clueless? Type $MA$0$RE ${BO}dev --help$RE $BO${LY}to see supported parameters and options.$RE\n\n\n"
+  }
+
+  if [ "$#" -eq 0 ]; then
+    usage
+    hint
     exit
   fi
 
@@ -12,7 +20,7 @@ sub_dev() {
     if [ -z "$skipopt" ]; then
       case "$arg" in
         "-h"|"--help")
-          printf "  $BO${LY}Usage: $MA$0$RE ${BO}dev $BO${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n\n"
+          usage "\n"
           printf "  $BO${LY}Supported parameters:$RE\n\n"
           printf "    $BO${LY}DDLC install  $RE${LY}location of existing DDLC install\n\n"
           printf "  $BO${LY}Supported options:$RE\n\n"
@@ -27,8 +35,8 @@ sub_dev() {
       continue
     else
       printf "  $BO${LY}Unrecognized parameter $RE$BO$arg${LY}.$RE\n\n"
-      printf "  $BO${LY}Usage: $MA$0 $RE${BO}dev ${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n"
-      printf "  $BO${LY}Clueless? Type $MA$0 $RE${BO}dev --help $BO${LY}to see supported commands and options.$RE\n\n\n"
+      usage
+      hint
       exit
     fi
   done

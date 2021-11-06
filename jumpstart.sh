@@ -78,9 +78,17 @@ prompt_yes_no() {
 
 #include include/command/dev
 sub_dev() {
-  if [ "$#" -eq 0 ]; then
-    printf "  $BO${LY}Usage: $MA$0$RE ${BO}dev $BO${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n"
+  usage() {
+    printf "  $BO${LY}Usage: $MA$0$RE ${BO}dev $BO${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n$1"
+  }
+
+  hint() {
     printf "  $BO${LY}Clueless? Type $MA$0$RE ${BO}dev --help$RE $BO${LY}to see supported parameters and options.$RE\n\n\n"
+  }
+
+  if [ "$#" -eq 0 ]; then
+    usage
+    hint
     exit
   fi
 
@@ -91,7 +99,7 @@ sub_dev() {
     if [ -z "$skipopt" ]; then
       case "$arg" in
         "-h"|"--help")
-          printf "  $BO${LY}Usage: $MA$0$RE ${BO}dev $BO${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n\n"
+          usage "\n"
           printf "  $BO${LY}Supported parameters:$RE\n\n"
           printf "    $BO${LY}DDLC install  $RE${LY}location of existing DDLC install\n\n"
           printf "  $BO${LY}Supported options:$RE\n\n"
@@ -106,8 +114,8 @@ sub_dev() {
       continue
     else
       printf "  $BO${LY}Unrecognized parameter $RE$BO$arg${LY}.$RE\n\n"
-      printf "  $BO${LY}Usage: $MA$0 $RE${BO}dev ${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n"
-      printf "  $BO${LY}Clueless? Type $MA$0 $RE${BO}dev --help $BO${LY}to see supported commands and options.$RE\n\n\n"
+      usage
+      hint
       exit
     fi
   done
@@ -168,9 +176,60 @@ EOF
 
 
 #include include/command/install
+sub_install() {
+  usage() {
+    printf "  $BO${LY}Usage: $MA$0 $RE${BO}install ${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n$1"
+  }
+
+  hint() {
+    printf "  $BO${LY}Clueless? Type $MA$0$RE ${BO}install --help$RE $BO${LY}to see supported parameters and options.$RE\n\n\n"
+  }
+
+  if [ "$#" -eq 0 ]; then
+    usage
+    hint
+    exit
+  fi
+
+  while [ "$#" -gt 0 ]; do
+    arg="$1"
+    shift
+
+    if [ -z "$skipopt" ]; then
+      case "$arg" in
+        "-h"|"--help")
+          usage "\n"
+          printf "  $BO${LY}Supported parameters:$RE\n\n"
+          printf "    $BO${LY}DDLC install  $RE${LY}location of existing DDLC install\n\n"
+          printf "  $BO${LY}Supported options:$RE\n\n"
+          printf "    $BO${LY}-h, --help    $RE${LY}show this text and exit\n\n\n"
+          exit
+          ;;
+      esac
+    fi
+
+    if [ -z "$dir" ]; then
+      dir="$arg"
+      continue
+    else
+      printf "  $BO${LY}Unrecognized parameter $RE$BO$arg${LY}.$RE\n\n"
+      usage
+      hint
+      exit
+    fi
+  done
+}
 
 
 #include include/args_processing
+usage() {
+  printf "  $BO${LY}Usage: $MA$0$RE $BO${GY}[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n$1"
+}
+
+hint() {
+  printf "  $BO${LY}Clueless? Type $MA$0 $RE${BO}--help $BO${LY}to see supported commands and options.$RE\n\n\n"
+}
+
 while [ "$#" -gt 0 ]; do
   arg="$1"
   shift
@@ -182,7 +241,7 @@ while [ "$#" -gt 0 ]; do
         continue
         ;;
       "-h"|"--help")
-        printf "  $BO${LY}Usage: $MA$0$RE $BO${GY}[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n\n"
+        usage "\n"
         printf "  $BO${LY}Supported commands:$RE\n\n"
         printf "    $BO${LY}i, install     $RE${LY}install MAS to DDLC install\n"
         printf "    $BO${LY}d, dev         $RE${LY}patch existing Monika After Story install for development use\n\n"
@@ -192,8 +251,8 @@ while [ "$#" -gt 0 ]; do
         ;;
       "-"*)
         printf "  $BO${LY}Unrecognized option $RE$BO$arg${LY}.$RE\n\n"
-        printf "  $BO${LY}Usage: $MA$0$RE $BO${GY}[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n"
-        printf "  $BO${LY}Clueless? Type $MA$0 $RE${BO}--help $BO${LY}to see supported commands and options.$RE\n\n\n"
+        usage
+        hint
         exit
         ;;
     esac
@@ -208,8 +267,8 @@ while [ "$#" -gt 0 ]; do
       ;;
     *)
         printf "  $BO${LY}Unrecognized command $RE$BO$arg${LY}.$RE\n\n"
-        printf "  $BO${LY}Usage: $MA$0$RE $BO${GY}[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n"
-        printf "  $BO${LY}Clueless? Type $MA$0 $RE${BO}--help $BO${LY}to see supported commands and options.$RE\n\n\n"
+        usage
+        hint
         exit
         ;;
   esac
