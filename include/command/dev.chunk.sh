@@ -1,6 +1,6 @@
 sub_dev() {
   usage() {
-    printf "  $BO${LY}Usage: $MA$0$RE ${BO}dev $BO${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n$1"
+    printf "  $BO${LY}Usage: $MA$0$RE ${BO}dev $BO${GY}[${LY}options $GY...] ${GY}<${LY}MAS install$GY>$RE\n$1"
   }
 
   hint() {
@@ -22,7 +22,7 @@ sub_dev() {
         "-h"|"--help")
           usage "\n"
           printf "  $BO${LY}Supported parameters:$RE\n\n"
-          printf "    $BO${LY}DDLC install  $RE${LY}location of existing DDLC install\n\n"
+          printf "    $BO${LY}MAS install  $RE${LY}location of existing MAS install\n\n"
           printf "  $BO${LY}Supported options:$RE\n\n"
           printf "    $BO${LY}-h, --help    $RE${LY}show this text and exit\n\n\n"
           exit
