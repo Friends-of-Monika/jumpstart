@@ -23,14 +23,14 @@ echo
 
 
 if [ "$#" -eq 0 ]; then
-  printf "  $BO${LY}Usage: $MA$0$RE $BO${GY}[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n"
-  printf "  $BO${LY}Clueless? Type $MA$0$RE $BO--help$RE $BO${LY}to see supported commands and options.$RE\n\n\n"
+  printf "  $BO${LY}Usage: $MA$0 $RE$BO${GY}[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n"
+  printf "  $BO${LY}Clueless? Type $MA$0 $RE$BO--help$RE $BO${LY}to see supported commands and options.$RE\n\n\n"
   exit
 fi
 
 sub_dev() {
   if [ "$#" -eq 0 ]; then
-    printf "  $BO${LY}Usage: $MA$0$RE ${BO}dev $BO${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n\n"
+    printf "  $BO${LY}Usage: $MA$0$RE ${BO}dev $BO${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n"
     printf "  $BO${LY}Clueless? Type $MA$0$RE ${BO}dev --help$RE $BO${LY}to see supported parameters and options.$RE\n\n\n"
     exit
   fi
@@ -56,8 +56,9 @@ sub_dev() {
       dir="$arg"
       continue
     else
-      printf "  $BO${LY}Usage: $MA$0$RE ${BO}dev $BO${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n\n"
-      printf "  $BO${LY}Clueless? Type $MA$0$RE $BO--help$RE $BO${LY}to see supported commands and options.$RE\n\n\n"
+      printf "  $BO${LY}Unrecognized parameter $RE$BO$arg${LY}.$RE\n\n"
+      printf "  $BO${LY}Usage: $MA$0 $RE${BO}dev ${GY}[${LY}options $GY...] ${GY}<${LY}DDLC install$GY>$RE\n"
+      printf "  $BO${LY}Clueless? Type $MA$0 $RE${BO}dev --help $BO${LY}to see supported commands and options.$RE\n\n\n"
       exit
     fi
   done
@@ -164,6 +165,12 @@ while [ "$#" -gt 0 ]; do
         printf "    $BO${LY}-h, --help     $RE${LY}show this text and exit\n\n\n"
         exit
         ;;
+      "-"*|"--"*)
+        printf "  $BO${LY}Unrecognized option $RE$BO$arg${LY}.$RE\n\n"
+        printf "  $BO${LY}Usage: $MA$0$RE $BO${GY}[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n"
+        printf "  $BO${LY}Clueless? Type $MA$0 $RE${BO}--help $BO${LY}to see supported commands and options.$RE\n\n\n"
+        exit
+        ;;
     esac
   fi
 
@@ -174,5 +181,11 @@ while [ "$#" -gt 0 ]; do
     "d"|"dev")
       sub_dev "$@"
       ;;
+    *)
+        printf "  $BO${LY}Unrecognized command $RE$BO$arg${LY}.$RE\n\n"
+        printf "  $BO${LY}Usage: $MA$0$RE $BO${GY}[${LY}options $GY...] <${MA}command$GY> [${LY}arguments $GY...]$RE\n"
+        printf "  $BO${LY}Clueless? Type $MA$0 $RE${BO}--help $BO${LY}to see supported commands and options.$RE\n\n\n"
+        exit
+        ;;
   esac
 done
