@@ -12,7 +12,7 @@ error_done_wrap() {
     printf "\n\033[1A\r\033[K  $BO$RD✘$RE $BO$MA%s... $RE" "$desc"
     printf "$BO${RD}error!\n\n   $(cat "$tmp")$RE\n$1"
     rm "$tmp"
-    exit 1
+    return 1
   else
     printf "\n\033[1A\r\033[K  $BO$GN✔$RE $BO$MA%s... $RE" "$desc"
     printf "$BO${MA}done.$RE\n$1"
