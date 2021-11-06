@@ -137,6 +137,7 @@ sub_dev() {
 
   patch_failed() {
     printf "  $BO$RD✘ $RE$BO${MA}Could not convert this install for development use :($RE\n\n"
+    exit 1
   }
 
 
@@ -234,6 +235,7 @@ sub_install() {
 
   install_failed() {
     printf "  $BO$RD✘ $RE$BO${MA}Could not add MAS to this DDLC install :($RE\n\n"
+    exit 1
   }
 
   get_rel_url() {

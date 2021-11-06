@@ -44,6 +44,7 @@ sub_dev() {
 
   patch_failed() {
     printf "  $BO$RD✘ $RE$BO${MA}Could not convert this install for development use :($RE\n\n"
+    exit 1
   }
 
 
