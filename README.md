@@ -22,8 +22,6 @@ available to the abovementioned people and is not collected by them.
 $ curl -L -o jumpstart https://dl.mon.icu/jumpstart
 ```
 
----
-
 Optionally, you can add it to `/usr/bin` (or any other location that is on $PATH.)
 
 In further examples, it is assumed that `jumpstart.sh` is saved as `jumpstart`
