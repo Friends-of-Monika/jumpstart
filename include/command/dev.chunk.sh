@@ -49,6 +49,10 @@ sub_dev() {
 
 
   patch_ddlc_py() {
+    if [ "$(uname -s)" = "Darwin" ]; then
+      dir="$dir/DDLC.app/Contents/Resources/autorun"
+    fi
+    
     if [ ! -f "$dir/DDLC.py" ]; then
       echo "patch: $dir/DDLC.py: no such file or directory." >&2
       return 1
